@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0d0d1a" />
+<title>A to Z Dirty Words — 18+</title>
+<style>
+  :root {
+    --bg1: #1a1a2e;
+    --bg2: #16213e;
+    --accent: #e94560;
+    --card: rgba(255, 255, 255, 0.07);
+    --cardEdge: rgba(255, 255, 255, 0.12);
+    --ink: #f2f2f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2));
+    background-size: 200% 200%;
+    animation: bgShift 14s ease infinite;
+    color: var(--ink);
+    transition: background 0.6s ease;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  @keyframes bgShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  h1 {
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .badge18 {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 4px 9px;
+    border-radius: 8px;
+    box-shadow: 0 0 16px var(--accent);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  /* ---------- card ---------- */
+  .stage {
+    perspective: 1200px;
+    width: min(92vw, 420px);
+    height: min(62vh, 430px);
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--card);
+    border: 1px solid var(--cardEdge);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 28px;
+    box-shadow: 0 22px 45px rgba(0,0,0,0.55), 0 0 32px rgba(0,0,0,0.25) inset;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .face.back { transform: rotateY(180deg); }
+
+  .emoji {
+    font-size: clamp(78px, 20vw, 132px);
+    line-height: 1;
+    filter: drop-shadow(0 8px 14px rgba(0,0,0,0.5));
+    animation: pop 0.45s ease;
+  }
+
+  .letters {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .cap {
+    font-size: clamp(76px, 20vw, 128px);
+    color: var(--accent);
+    text-shadow: 0 0 26px var(--accent);
+    transition: color 0.4s ease, text-shadow 0.4s ease;
+  }
+
+  .small { font-size: clamp(44px, 11vw, 72px); color: var(--ink); opacity: 0.8; }
+
+  .word {
+    font-size: clamp(1.1rem, 4vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.95;
+  }
+
+  .hint {
+    position: absolute;
+    bottom: 14px;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    opacity: 0.35;
+    text-transform: uppercase;
+  }
+
+  .dots {
+    display: flex;
+    gap: 7px;
+    margin-top: 2px;
+  }
+
+  .dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+
+  .dots i.on {
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    transform: scale(1.25);
+  }
+
+  .back .letters { flex-direction: column; gap: 2px; }
+  .back .cap { color: var(--ink); text-shadow: none; }
+  .back .small { color: var(--accent); text-shadow: 0 0 18px var(--accent); }
+
+  @keyframes pop {
+    0%   { transform: scale(0.6); opacity: 0; }
+    70%  { transform: scale(1.08); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .bounce { animation: bounce 0.4s ease; }
+  @keyframes bounce {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  /* ---------- controls ---------- */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .arrow {
+    width: 62px;
+    height: 62px;
+    border: 1px solid var(--cardEdge);
+    border-radius: 50%;
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--accent);
+    font-size: 1.7rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.45);
+    transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    display: grid;
+    place-items: center;
+  }
+
+  .arrow:hover {
+    transform: translateY(-3px) scale(1.06);
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.5), 0 0 22px var(--accent);
+  }
+  .arrow:active { transform: scale(0.94); }
+
+  .counter {
+    min-width: 96px;
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 700;
+    background: var(--card);
+    border: 1px solid var(--cardEdge);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 10px 16px;
+    border-radius: 999px;
+    letter-spacing: 2px;
+  }
+
+  .bar {
+    width: min(88vw, 420px);
+    height: 6px;
+    background: rgba(255,255,255,0.14);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .bar > span {
+    display: block;
+    height: 100%;
+    width: 4%;
+    background: var(--accent);
+    border-radius: 999px;
+    box-shadow: 0 0 12px var(--accent);
+    transition: width 0.35s ease, background 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .tools {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .chip {
+    border: 1px solid var(--cardEdge);
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--ink);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .chip:hover {
+    background: rgba(255,255,255,0.16);
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(255,255,255,0.08);
+  }
+
+  .foot {
+    position: fixed;
+    bottom: 8px;
+    font-size: 0.66rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.28;
+  }
+
+  /* ---------- age gate ---------- */
+  .gate {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: radial-gradient(circle at 50% 40%, #1d1030 0%, #08080f 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
+  }
+
+  .gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .gateBox {
+    text-align: center;
+    max-width: 400px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 26px;
+    padding: 34px 28px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  }
+
+  .gate18 {
+    font-size: 66px;
+    font-weight: 900;
+    line-height: 1;
+    color: #e94560;
+    text-shadow: 0 0 30px #e94560;
+  }
+
+  .gate18 span { font-size: 34px; vertical-align: super; }
+
+  .gateBox h2 {
+    margin: 12px 0 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+
+  .gateBox p {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    opacity: 0.68;
+    margin-bottom: 22px;
+  }
+
+  .gateBtns { display: flex; gap: 12px; justify-content: center; }
+
+  .gateBtns button {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .gateBtns .yes {
+    background: #e94560;
+    color: #fff;
+    box-shadow: 0 0 22px rgba(233,69,96,0.55);
+  }
+
+  .gateBtns .yes:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(233,69,96,0.8); }
+
+  .gateBtns .no {
+    background: rgba(255,255,255,0.1);
+    color: #f2f2f8;
+    border: 1px solid rgba(255,255,255,0.16);
+  }
+
+  .gateBtns .no:hover { background: rgba(255,255,255,0.18); }
+
+  .blocked { display: none; }
+
+  @media (max-height: 620px) {
+    .stage { height: min(58vh, 330px); }
+    h1 { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== 18+ age gate ===== -->
+  <div class="gate" id="gate">
+    <div class="gateBox" id="gateAsk">
+      <div class="gate18">18<span>+</span></div>
+      <h2>Adults Only</h2>
+      <p>Ye website sirf 18 saal ya usse bade adults ke liye hai. Andar sexual words aur adult (18+) vocabulary hai. Kya aap 18+ hain?</p>
+      <div class="gateBtns">
+        <button class="yes" id="gateYes">Haan, main 18+ hoon</button>
+        <button class="no" id="gateNo">Nahi</button>
+      </div>
+    </div>
+
+    <div class="gateBox blocked" id="gateBlocked">
+      <div class="gate18">🚫</div>
+      <h2>Access Restricted</h2>
+      <p>Sorry — is website ka adult content sirf 18+ adults ke liye hai. Jab aap 18+ ho jayein, wapas aayein.</p>
+    </div>
+  </div>
+
+  <h1>A to Z Dirty Words <span class="badge18">18+</span></h1>
+
+  <div class="stage">
+    <div class="card" id="card" title="Click to flip">
+      <div class="face front">
+        <div class="emoji" id="emoji">🍑</div>
+        <div class="letters">
+          <span class="cap" id="capFront">A</span>
+          <span class="small" id="smallFront">a</span>
+        </div>
+        <div class="word" id="word">Anal</div>
+        <div class="dots" id="dots"></div>
+        <div class="hint">tap card to flip</div>
+      </div>
+
+      <div class="face back">
+        <div class="letters">
+          <span class="cap" id="capBack">A</span>
+          <span class="small" id="smallBack">a</span>
+        </div>
+        <div class="word" id="soundWord">"A" for Anal</div>
+        <div class="emoji" id="emojiBack" style="font-size: clamp(56px,14vw,92px)">🍑</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="arrow" id="prev" aria-label="Previous">&#8592;</button>
+    <div class="counter" id="counter">A / Z</div>
+    <button class="arrow" id="next" aria-label="Next">&#8594;</button>
+  </div>
+
+  <div class="bar"><span id="progress"></span></div>
+
+  <div class="tools">
+    <button class="chip" id="nextWord">&#128260; Next word</button>
+    <button class="chip" id="speak">&#128266; Say it</button>
+    <button class="chip" id="random">&#127922; Random</button>
+    <button class="chip" id="theme">&#127912; Theme</button>
+  </div>
+
+  <div class="foot">Adult vocabulary edition &middot; 18+ only &middot; sexual content inside</div>
+
+<script>
+  // ---------- data: adult / sexual vocabulary words + emoji pictures ----------
+  const CARDS = [
+    { l: "A", words: [ {w:"Anal",e:"\u{1F351}"}, {w:"Aphrodisiac",e:"\u{1F353}"}, {w:"Afterglow",e:"\u{1F305}"} ] },
+    { l: "B", words: [ {w:"Blowjob",e:"\u{1F444}"}, {w:"Boobs",e:"\u{1F348}"}, {w:"Bondage",e:"\u{1F517}"} ] },
+    { l: "C", words: [ {w:"Climax",e:"\u{1F4A6}"}, {w:"Cowgirl",e:"\u{1F920}"}, {w:"Creamy",e:"\u{1F366}"} ] },
+    { l: "D", words: [ {w:"Dick",e:"\u{1F346}"}, {w:"Doggy Style",e:"\u{1F351}"}, {w:"Dominatrix",e:"\u{1F5A4}"} ] },
+    { l: "E", words: [ {w:"Erotica",e:"\u{1F4D6}"}, {w:"Erection",e:"\u{1F346}"}, {w:"Ecstasy",e:"\u2728"} ] },
+    { l: "F", words: [ {w:"Fuck",e:"\u{1F4A5}"}, {w:"Foreplay",e:"\u{1F618}"}, {w:"Fondle",e:"\u270B"} ] },
+    { l: "G", words: [ {w:"G-Spot",e:"\u{1F4A6}"}, {w:"Grind",e:"\u{1F483}"}, {w:"Glory Hole",e:"\u{1F573}"} ] },
+    { l: "H", words: [ {w:"Horny",e:"\u{1F608}"}, {w:"Handjob",e:"\u270B"}, {w:"Hump",e:"\u{1F525}"} ] },
+    { l: "I", words: [ {w:"Intercourse",e:"\u{1F6CF}"}, {w:"Inner Thighs",e:"\u{1F9B5}"}, {w:"Insertion",e:"\u{1F346}"} ] },
+    { l: "J", words: [ {w:"Jerk Off",e:"\u270A"}, {w:"Jizz",e:"\u{1F4A6}"}, {w:"Juicy",e:"\u{1F351}"} ] },
+    { l: "K", words: [ {w:"Kinky",e:"\u{1F608}"}, {w:"Kiss",e:"\u{1F48B}"}, {w:"Kamasutra",e:"\u{1F4D6}"} ] },
+    { l: "L", words: [ {w:"Lick",e:"\u{1F445}"}, {w:"Lingerie",e:"\u{1FA71}"}, {w:"Love Bites",e:"\u{1F353}"} ] },
+    { l: "M", words: [ {w:"Masturbate",e:"\u270A"}, {w:"Moan",e:"\u{1F629}"}, {w:"Melons",e:"\u{1F348}"} ] },
+    { l: "N", words: [ {w:"Naked",e:"\u{1F648}"}, {w:"Nipple",e:"\u{1F352}"}, {w:"Nuru Massage",e:"\u{1F486}"} ] },
+    { l: "O", words: [ {w:"Orgasm",e:"\u{1F4A6}"}, {w:"Oral",e:"\u{1F444}"}, {w:"O-Face",e:"\u{1F632}"} ] },
+    { l: "P", words: [ {w:"Pussy",e:"\u{1F351}"}, {w:"Penis",e:"\u{1F346}"}, {w:"Prostate",e:"\u{1F446}"} ] },
+    { l: "Q", words: [ {w:"Quickie",e:"\u23F1"}, {w:"Queen",e:"\u{1F451}"}, {w:"Queef",e:"\u{1F4A8}"} ] },
+    { l: "R", words: [ {w:"Ride",e:"\u{1F346}"}, {w:"Rim Job",e:"\u{1F445}"}, {w:"Rub",e:"\u{1F486}"} ] },
+    { l: "S", words: [ {w:"Sex",e:"\u{1F525}"}, {w:"Suck",e:"\u{1F444}"}, {w:"Strip",e:"\u{1FA71}"} ] },
+    { l: "T", words: [ {w:"Tits",e:"\u{1F348}"}, {w:"Threesome",e:"\u{1F465}"}, {w:"Tease",e:"\u{1F380}"} ] },
+    { l: "U", words: [ {w:"Undress",e:"\u{1F97B}"}, {w:"Unzip",e:"\u{1F456}"}, {w:"Underwear",e:"\u{1FA72}"} ] },
+    { l: "V", words: [ {w:"Vibrator",e:"\u{1F50C}"}, {w:"Voyeur",e:"\u{1F440}"}, {w:"Vulva",e:"\u{1F33A}"} ] },
+    { l: "W", words: [ {w:"Wet",e:"\u{1F4A6}"}, {w:"Whore",e:"\u{1F460}"}, {w:"Wax Play",e:"\u{1F56F}"} ] },
+    { l: "X", words: [ {w:"X-Rated",e:"\u{1F3AC}"}, {w:"XXX",e:"\u{1F51E}"}, {w:"Xoxo",e:"\u{1F48B}"} ] },
+    { l: "Y", words: [ {w:"Yoni",e:"\u{1F338}"}, {w:"Yummy",e:"\u{1F60B}"}, {w:"Yoga Pants",e:"\u{1F9D8}"} ] },
+    { l: "Z", words: [ {w:"Zipless",e:"\u{1F4A8}"}, {w:"Zucchini",e:"\u{1F952}"}, {w:"Zodiac",e:"\u{1F52E}"} ] }
+  ];
+
+  // ---------- dark / neon themes ----------
+  const THEMES = [
+    ["#1a1a2e", "#16213e", "#e94560"],
+    ["#0f0c29", "#302b63", "#ff2e63"],
+    ["#141e30", "#243b55", "#00d2ff"],
+    ["#2d033b", "#810ca8", "#c147e9"],
+    ["#1f1c2c", "#3b3452", "#f7797d"],
+    ["#0b132b", "#1c2541", "#5bc0be"],
+    ["#232526", "#414345", "#ff9a44"],
+    ["#141322", "#2b1055", "#7f5af0"]
+  ];
+
+  const card     = document.getElementById("card");
+  const emojiEl  = document.getElementById("emoji");
+  const emojiBk  = document.getElementById("emojiBack");
+  const capF     = document.getElementById("capFront");
+  const smallF   = document.getElementById("smallFront");
+  const capB     = document.getElementById("capBack");
+  const smallB   = document.getElementById("smallBack");
+  const wordEl   = document.getElementById("word");
+  const soundW   = document.getElementById("soundWord");
+  const counter  = document.getElementById("counter");
+  const progress = document.getElementById("progress");
+  const dotsEl   = document.getElementById("dots");
+
+  let i  = 0;          // letter index
+  let wi = 0;          // word index for current letter
+  let manualTheme = -1; // -1 = theme letter ke hisaab se badlegi
+
+  function applyTheme(t) {
+    document.documentElement.style.setProperty("--bg1", t[0]);
+    document.documentElement.style.setProperty("--bg2", t[1]);
+    document.documentElement.style.setProperty("--accent", t[2]);
+  }
+
+  function render() {
+    const c = CARDS[i];
+    const d = c.words[wi];
+
+    emojiEl.textContent = d.e;
+    emojiBk.textContent = d.e;
+    capF.textContent    = c.l;
+    smallF.textContent  = c.l.toLowerCase();
+    capB.textContent    = c.l;
+    smallB.textContent  = c.l.toLowerCase();
+    wordEl.textContent  = d.w;
+    soundW.textContent  = c.l + " \u201C" + c.l + "\u201D for " + d.w;
+    counter.textContent = c.l + " / Z";
+    progress.style.width = ((i + 1) / CARDS.length * 100) + "%";
+
+    // word indicator dots (one per word for this letter)
+    dotsEl.innerHTML = c.words.map((_, k) =>
+      '<i class="' + (k === wi ? "on" : "") + '"></i>'
+    ).join("");
+
+    applyTheme(manualTheme >= 0 ? THEMES[manualTheme] : THEMES[i % THEMES.length]);
+
+    // restart pop animation
+    emojiEl.style.animation = "none";
+    void emojiEl.offsetWidth;
+    emojiEl.style.animation = "";
+  }
+
+  function go(step) {
+    i = (i + step + CARDS.length) % CARDS.length;
+    wi = 0;
+    card.classList.remove("flipped");
+    card.classList.add("bounce");
+    setTimeout(() => card.classList.remove("bounce"), 400);
+    setTimeout(render, 120);
+  }
+
+  function nextWord() {
+    const c = CARDS[i];
+    wi = (wi + 1) % c.words.length;
+    card.classList.add("bounce");
+    setTimeout(() => card.classList.remove("bounce"), 400);
+    render();
+  }
+
+  document.getElementById("next").onclick = () => go(1);
+  document.getElementById("prev").onclick = () => go(-1);
+  card.onclick = () => card.classList.toggle("flipped");
+
+  document.getElementById("nextWord").onclick = nextWord;
+
+  document.getElementById("random").onclick = () => {
+    let n;
+    do { n = Math.floor(Math.random() * CARDS.length); } while (n === i);
+    i = n;
+    wi = Math.floor(Math.random() * CARDS[n].words.length);
+    card.classList.remove("flipped");
+    render();
+  };
+
+  document.getElementById("theme").onclick = () => {
+    manualTheme = (manualTheme + 1) % THEMES.length;
+    applyTheme(THEMES[manualTheme]);
+  };
+
+  document.getElementById("speak").onclick = () => {
+    if (!("speechSynthesis" in window)) return;
+    const c = CARDS[i];
+    const d = c.words[wi];
+    const u = new SpeechSynthesisUtterance(c.l + ". " + c.l + " for " + d.w);
+    u.rate = 0.85;
+    u.pitch = 1.0;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  };
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") go(1);
+    if (e.key === "ArrowLeft")  go(-1);
+    if (e.key === "ArrowDown" || e.key === "n" || e.key === "N") nextWord();
+    if (e.key === "t" || e.key === "T") document.getElementById("theme").click();
+    if (e.key === " ") { e.preventDefault(); card.classList.toggle("flipped"); }
+  });
+
+  // swipe support for mobile
+  let startX = null;
+  document.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener("touchend", (e) => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    startX = null;
+  }, { passive: true });
+
+  // ---------- age gate logic ----------
+  const gate = document.getElementById("gate");
+
+  if (sessionStorage.getItem("ageOK") === "1") {
+    gate.classList.add("hide");
+  }
+
+  document.getElementById("gateYes").onclick = () => {
+    sessionStorage.setItem("ageOK", "1");
+    gate.classList.add("hide");
+  };
+
+  document.getElementById("gateNo").onclick = () => {
+    document.getElementById("gateAsk").style.display = "none";
+    document.getElementById("gateBlocked").style.display = "block";
+  };
+
+  render();
+</script>
+</body>
+</html>
